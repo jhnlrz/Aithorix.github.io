@@ -1708,5 +1708,5 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 2px;
 }
 
-/* Remove unused styles and keep only essential ones */
+
 </style>
