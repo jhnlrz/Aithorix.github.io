@@ -5,18 +5,14 @@ import { Users, Share2, Star, Video, UserCircle, Search, Plus, Mail, Phone, Uplo
 import EventSidebar from '@/Components/EventSidebar.vue'
 import Header from '@/Components/Header.vue'
 import Button from '@/Components/Button.vue'
-import Lira from '@/Components/Lira.vue'
 
-const isLiraOpen = ref(false);
 const page = ref({
     projectDetails: {
         name: 'Sample Project'
     }
 })
 
-const showModal = ref(false)
 const showDropdown = ref(null)
-const selectedFile = ref(null)
 const showEditModal = ref(false)
 const editingVendor = ref(null)
 
