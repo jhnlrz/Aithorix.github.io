@@ -35,6 +35,7 @@ const props = defineProps({
 })
 
 const searchQuery = ref('')
+const currentProject = ref('Event Planning')
 
 const menuItems = ref([
   { icon: Home, text: 'Home', path: '/home', isActive: true },
@@ -96,24 +97,6 @@ watch(
   { immediate: true, deep: true }
 )
 
-const navigationItems = [
-  { 
-    name: 'Schedule', 
-    path: '/event-planning/schedule',
-    icon: 'Calendar' // You'll need to import this icon
-  },
-  { 
-    name: 'Budget', 
-    path: '/event-planning/budget',
-    icon: 'DollarSign' // You'll need to import this icon
-  },
-  { 
-    name: 'Vendors', 
-    path: '/event-planning/vendors',
-    icon: 'Users' // You'll need to import this icon
-  }
-  // Add other navigation items as needed
-]
 </script>
 
 <template>
@@ -136,11 +119,8 @@ const navigationItems = [
     <nav class="px-2">
       <ul class="space-y-1">
         <li v-for="item in menuItems" :key="item.text">
-          <Link 
-            :href="item.path" 
-            class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors duration-200 font-medium"
-            :class="item.isActive ? 'bg-blue text-light hover:bg-button' : ''">
-          >
+          <Link :href="item.path" class="flex items-center gap-3 px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100"
+          :class="item.isActive ? 'bg-blue text-light hover:bg-button' : ''">
             <component :is="item.icon" class="w-5 h-5" />
             {{ item.text }}
           </Link>
@@ -150,53 +130,41 @@ const navigationItems = [
 
     <!-- Project Section -->
     <div class="mt-6">
-      <div class="px-4 py-2 border-t border-b border-gray-200 mx-2 font-medium text-gray-600">
+      <div class="px-4 mb-2 border-b border-neutral mx-2">
         Projects
       </div>  
       <div v-for="project in page.props.projects.project" :key="project.id" class="w-full my-2">
-        <button 
-          @click="toggleDown(project.id)" 
-          class="flex w-full flex-row px-5 py-2 justify-between items-center hover:bg-gray-50 rounded-lg transition-colors duration-200"
-        >
-          <p class="text-base font-medium">{{ project.name }}</p>
-          <ChevronDown 
-            :class="{ 
-              'transform rotate-180 transition-transform duration-300': projectStates.get(project.id),
-              'transition-transform duration-300': !projectStates.get(project.id)
-            }"
-            class="w-5 h-5 text-gray-500"
-          />
+        <button @click="toggleDown(project.id)" class="flex w-full flex-row px-5 justify-between items-center">
+          <p class="text-lg">{{ project.name }}</p>
+          <ChevronDown :class="{ 'transform rotate-180 transition-transform duration-300': projectStates.get(project.id) }"/>
         </button>
         <Transition name="list">
-          <ul v-show="isProjectOpen(project.id)" class="space-y-1 px-2 mt-1">
-            <li v-for="item in props.projectItems" :key="item.text">
-              <Link
-                :href="item.path + project.id"
-                class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200"
-                :class="isItemActive(project.id, item.path) ? 'bg-blue text-light hover:bg-button-hover' 
+          <ul v-show="isProjectOpen(project.id)" class="space-y-1 px-2">
+          <li v-for="item in props.projectItems" :key="item.text">
+            <Link
+              :href="item.path + project.id"
+              class="flex items-center gap-3 px-4 py-2 rounded-lg"
+              :class="isItemActive(project.id, item.path) ? 'bg-blue text-light hover:bg-button-hover' 
               : 'text-dark'">
-                <component :is="item.icon" class="w-5 h-5" />
-                {{ item.text }}
-              </Link>
-            </li>
-          </ul>
-        </Transition>
+              <component :is="item.icon" class="w-5 h-5" />
+              {{ item.text }}
+            </Link>
+          </li>
+        </ul>
+      </Transition>
       </div>
+      
     </div>
 
     <!-- Meeting Summaries -->
-    <div class="mt-6 px-4 pb-6">
-      <a 
-        href="/meetings" 
-        class="flex items-center gap-3 px-4 py-2.5 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium"
-      >
+    <div class="mt-6 px-4">
+      <a href="/meetings" class="flex items-center gap-3 px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100">
         <CalendarDays class="w-5 h-5" />
         Meeting Summaries
       </a>
     </div>
   </aside>
 </template>
-
 <style>
 .list-enter-active,
 .list-leave-active {
